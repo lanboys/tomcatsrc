@@ -16,7 +16,16 @@
  */
 package org.apache.catalina.startup;
 
-import org.apache.catalina.*;
+import org.apache.catalina.Container;
+import org.apache.catalina.Context;
+import org.apache.catalina.DistributedManager;
+import org.apache.catalina.Engine;
+import org.apache.catalina.Globals;
+import org.apache.catalina.Host;
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.LifecycleEvent;
+import org.apache.catalina.LifecycleListener;
+import org.apache.catalina.Manager;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.core.StandardHost;
 import org.apache.catalina.util.ContextName;
@@ -29,9 +38,24 @@ import org.apache.tomcat.util.digester.Digester;
 import org.apache.tomcat.util.modeler.Registry;
 import org.apache.tomcat.util.res.StringManager;
 
-import javax.management.ObjectName;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -39,6 +63,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.management.ObjectName;
 
 
 /**
@@ -309,6 +335,7 @@ public class HostConfig
             // 检查 & 发布
             check();
         } else if (event.getType().equals(Lifecycle.BEFORE_START_EVENT)) {
+            // 主要是 检测配置文件夹是否存在，不存在则创建
             beforeStart();
         } else if (event.getType().equals(Lifecycle.START_EVENT)) {
             // 发布项目
@@ -577,19 +604,21 @@ public class HostConfig
                 if (isServiced(cn.getName()) || deploymentExists(cn.getName()))
                     continue;
 
-                results.add(
-                        es.submit(new DeployDescriptor(this, cn, contextXml)));
+                //results.add(
+                //        es.submit(new DeployDescriptor(this, cn, contextXml)));
+                deployDescriptor(cn, contextXml);
+
             }
         }
 
-        for (Future<?> result : results) {
-            try {
-                result.get();
-            } catch (Exception e) {
-                log.error(sm.getString(
-                        "hostConfig.deployDescriptor.threaded.error"), e);
-            }
-        }
+        //for (Future<?> result : results) {
+        //    try {
+        //        result.get();
+        //    } catch (Exception e) {
+        //        log.error(sm.getString(
+        //                "hostConfig.deployDescriptor.threaded.error"), e);
+        //    }
+        //}
     }
 
 
@@ -813,18 +842,19 @@ public class HostConfig
                     continue;
                 }
 
-                results.add(es.submit(new DeployWar(this, cn, war)));
+                //results.add(es.submit(new DeployWar(this, cn, war)));
+                deployWAR(cn, war);
             }
         }
 
-        for (Future<?> result : results) {
-            try {
-                result.get();
-            } catch (Exception e) {
-                log.error(sm.getString(
-                        "hostConfig.deployWar.threaded.error"), e);
-            }
-        }
+        //for (Future<?> result : results) {
+        //    try {
+        //        result.get();
+        //    } catch (Exception e) {
+        //        log.error(sm.getString(
+        //                "hostConfig.deployWar.threaded.error"), e);
+        //    }
+        //}
     }
 
 
@@ -1147,18 +1177,22 @@ public class HostConfig
                 if (isServiced(cn.getName()) || deploymentExists(cn.getName()))
                     continue;
 
-                results.add(es.submit(new DeployDirectory(this, cn, dir)));
+                // todo 为了调试方便此处修改为单线程执行
+                //results.add(es.submit(new DeployDirectory(this, cn, dir)));
+                deployDirectory(cn, dir);
             }
         }
 
-        for (Future<?> result : results) {
-            try {
-                result.get();
-            } catch (Exception e) {
-                log.error(sm.getString(
-                        "hostConfig.deployDir.threaded.error"), e);
-            }
-        }
+        // todo 为了调试方便上面修改为单线程执行，以下获取线程返回结果的类暂时注释掉
+
+        //for (Future<?> result : results) {
+        //    try {
+        //        result.get();
+        //    } catch (Exception e) {
+        //        log.error(sm.getString(
+        //                "hostConfig.deployDir.threaded.error"), e);
+        //    }
+        //}
     }
 
 

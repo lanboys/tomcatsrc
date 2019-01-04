@@ -138,6 +138,9 @@
                        prefix="localhost_access_log." suffix=".txt"
                        pattern="%h %l %u %t &quot;%r&quot; %s %b"/>
 
+                <!--<Context docBase="D:/Android/apache-tomcat/upload/v1" path="/upload/vv1"/>-->
+                <!--<Context docBase="D:/Android/apache-tomcat/upload/v2" path="/upload/vv2"/>-->
+
             </Host>
         </Engine>
     </Service>

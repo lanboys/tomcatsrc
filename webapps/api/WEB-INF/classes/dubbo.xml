@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    <!--定义了提供方应用信息，用于计算依赖关系；在 dubbo-admin 或 dubbo-monitor 会显示这个名字，方便辨识-->
+    <dubbo:application name="dubbo_name_api" owner="dubbo_owner_api"
+                       organization="dubbo_organization_api"/>
+
+    <!--使用 zookeeper 注册中心暴露服务，注意要先开启 zookeeper-->
+    <dubbo:registry address="${dubbo_registry_address}"/>
+
+    <dubbo:consumer timeout="${dubbo_consumer_timeout}" retries="${dubbo_consumer_retries}"
+                    filter="CustomConsumerExceptionFilter"/>
+
+    <!-- 用户服务 -->
+    <dubbo:reference interface="com.bing.lan.project.userApi.service.DubboUserService"
+                     id="dubboUserService" check="true"/>
+    <!-- 群服务 -->
+    <dubbo:reference interface="com.bing.lan.project.userApi.service.DubboGroupUserService"
+                     id="dubboGroupUserService" check="true"/>
+    <!-- 群交易服务 -->
+    <dubbo:reference interface="com.bing.lan.project.userApi.service.DubboGroupTradeService"
+                     id="dubboGroupTradeService" check="true"/>
+</beans>

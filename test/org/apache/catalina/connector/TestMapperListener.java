@@ -16,15 +16,6 @@
  */
 package org.apache.catalina.connector;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import org.apache.catalina.Container;
 import org.apache.catalina.ContainerListener;
 import org.apache.catalina.LifecycleException;
@@ -32,6 +23,14 @@ import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.startup.TomcatBaseTest;
 import org.apache.tomcat.util.buf.ByteChunk;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TestMapperListener extends TomcatBaseTest {
 
@@ -45,7 +44,8 @@ public class TestMapperListener extends TomcatBaseTest {
 
         Tomcat tomcat = getTomcatInstance();
 
-        File appDir = new File(getBuildDirectory(), "webapps/examples");
+        //File appDir = new File(getBuildDirectory(), "webapps/examples");
+        File appDir = new File("E:/workspace/Fork_workspace/IDEA/tomcatsrc-dev", "webapps/examples");
         // app dir is relative to server home
         tomcat.addWebapp(null, "/examples", appDir.getAbsolutePath());
         tomcat.start();

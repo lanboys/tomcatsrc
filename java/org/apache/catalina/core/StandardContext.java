@@ -5535,6 +5535,7 @@ public class StandardContext extends ContainerBase
                     ((Lifecycle) resources).start();
 
                 // Notify our interested LifecycleListeners
+                // todo 加载xml配置context
                 fireLifecycleEvent(Lifecycle.CONFIGURE_START_EVENT, null);
                 
                 // Start our child containers, if not already started

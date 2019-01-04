@@ -699,6 +699,7 @@ public abstract class AbstractEndpoint<S> {
             acceptors[i] = createAcceptor();
             String threadName = getName() + "-Acceptor-" + i;
             acceptors[i].setThreadName(threadName);
+            // 接收线程
             Thread t = new Thread(acceptors[i], threadName);
             t.setPriority(getAcceptorThreadPriority());
             t.setDaemon(getDaemon());

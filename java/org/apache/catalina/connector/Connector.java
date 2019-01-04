@@ -30,11 +30,12 @@ import org.apache.tomcat.util.IntrospectionUtils;
 import org.apache.tomcat.util.http.mapper.Mapper;
 import org.apache.tomcat.util.res.StringManager;
 
-import javax.management.ObjectName;
 import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import javax.management.ObjectName;
 
 
 /**
@@ -973,7 +974,7 @@ public class Connector extends LifecycleMBeanBase  {
 
         // Initialize adapter
         adapter = new CoyoteAdapter(this);
-        // 设置Adapter
+        // ProtocolHandler ( Http11Protocol ) 设置Adapter
         protocolHandler.setAdapter(adapter);
 
         // Make sure parseBodyMethodsSet has a default

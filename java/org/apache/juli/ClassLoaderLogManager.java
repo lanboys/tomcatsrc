@@ -42,7 +42,6 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-
 /**
  * Per classloader LogManager implementation.
  *
@@ -460,6 +459,8 @@ public class ClassLoaderLogManager extends LogManager {
             }
         }
         if ((is == null) && (classLoader == ClassLoader.getSystemClassLoader())) {
+
+            System.setProperty("java.util.logging.config.file", "E:/workspace/Fork_workspace/IDEA/tomcatsrc-dev/conf/logging.properties");
             String configFileStr = System.getProperty("java.util.logging.config.file");
             if (configFileStr != null) {
                 try {
